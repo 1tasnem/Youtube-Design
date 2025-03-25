@@ -30,6 +30,15 @@ const loadVideos = () =>
     
     };
     
+    function getTimeString(time)
+    {
+        //get Hour and rest seconds 
+        const hour = parseInt(time / 3600);
+        let remainigSecond = time % 3600;
+        const minute = parseInt(remainigSecond / 60);
+        remainigSecond = remainigSecond % 60;
+        return `${hour} hour ${minute} minute ${remainigSecond} second ago`;
+    }
 //{ 
 // "category_id ": "1001",
 // "category" : "Music",
@@ -65,11 +74,16 @@ const displayCategories = (categories) =>
         console.log(video);
         const card = document.createElement("div");
         card.classList = "card bg-base-100  shadow-sm"
-        card.innerHTML = `<figure class="h-[200px]">
+        card.innerHTML = `<figure class="h-[200px]  relative">
     <img
       src=${video.thumbnail}
       class = "w-full h-full object-cover"
       alt="Shoes" />
+     ${
+    video.others.posted_date?.length == 0
+    ? "" : `<span class = "absolute right-2 bottom-2 bg-black text-white rounded p-1">${getTimeString(video.others.posted_date)}</span>`
+     }
+ 
   </figure>
   <div class=" px-0 py-2 flex  gap-2">
   <div >
@@ -80,9 +94,13 @@ const displayCategories = (categories) =>
   <div class ="flex items-center gap-3">
   
   <p class = "text-gray-400">${video.authors[0].profile_name}</p>
-  <img class = "w-5" src="https://img.icons8.com/?size=96&id=D9RtvkuOe31p&format=png"
+ ${
+    video.authors[0].verified == true 
+    ? ` <img class = "w-5" src="https://img.icons8.com/?size=96&id=D9RtvkuOe31p&format=png"/>`
+    : ""
+ }
   </div>
-  <p></p>
+  <p class = "text-gray-400"> 91 views</p>
  
   </div>
   </div>`;
